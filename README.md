@@ -2,8 +2,8 @@
 <img src="https://i.imgur.com/Clzj7Xs.png" alt="osTicket logo"/>
 </p>
 
-<h1>Network Security Groups (NSGs) and Inspecting Traffic Between Azure Virtual Machines</h1>
-In this tutorial, we observe various network traffic to and from Azure Virtual Machines with Wireshark as well as experiment with Network Security Groups. <br />
+<h1>osTicket - Prerequisites and Installation</h1>
+In this tutorial, we outline the prerequisites and installation of the open-source help desk ticketing system osTicket.<br />
 
 
 <!--- <h2>Video Demonstration</h2>(coming soon!) -->
@@ -14,23 +14,24 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 
 - Microsoft Azure (Virtual Machines/Compute)
 - Remote Desktop
-- Various Command-Line Tools
-- Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
-- Wireshark (Protocol Analyzer)
+- Internet Information Services (IIS)
 
 <h2>Operating Systems Used </h2>
 
 - Windows 10 (21H2)
-- Ubuntu Server 20.04
 
 <h2>High-Level Steps</h2>
 
 - Creating Resources (VMs)
-- Observing ICMP traffic
-- Observe SSH traffic
-- Observe DHCP traffic
-- Observe DNS traffic
-- Observe RDP traffic
+- Installation/Enable IIS
+- Install PHP Manager for IIS
+- Install Rewrite Module
+- Create directory C:\PHP
+- Install PHP 7.3.8
+- Install VC_redist.x86.exe
+- Install MySQL
+- Install osTicket/Enable extensions
+- Intall HeidiSQL
 
 <h2>Actions and Observations</h2>
 
@@ -39,128 +40,182 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 - Create a Windows 10 Virtual Machine (VM)
     - While creating the VM, select the previously created Resource Group
     - While creating the VM, allow it to create a new Virtual Network (Vnet) and Subnet
-- Create a Linux (Ubuntu) VM
-    - While create the VM, select the previously created Resource Group and Vnet
-- Observe Your Virtual Network within Network Watcher
 
 <br />
 
-#### NSG Resource Group.
+#### osTicket Resource Group.
 <p>
-<img src="https://i.imgur.com/VXfIPeR.png" height="80%" width="80%" alt="Network Security Group Resource Group"/>
+<img src="https://i.imgur.com/c7nshYx.png" height="60%" width="60%" alt="osTicket Resource Group"/>
 </p>
 
-#### CMD Line Interface inside VM.
+#### osTicket VM CMD Line
 <p>
-<img src="https://i.imgur.com/c5nnvsR.png" height="80%" width="80%" alt="CMD Line Interface inside VM"/>
-</p>
-
-#### Wireshark Pack Analyzer inside VM.
-<p>
-<img src="https://i.imgur.com/Jr8GE8D.png" height="80%" width="80%" alt="Wireshark Packet Analyzer inside VM"/>
-</p>
-
-<br />
-
-#### Part 2 (Observe ICMP Traffic)
-- Use Remote Desktop to connect to your Windows 10 Virtual Machine
-- Within your Windows 10 Virtual Machine, Install Wireshark
-- Open Wireshark and filter for ICMP traffic only
-- Retrieve the private IP address of the Ubuntu VM and attempt to ping it from within the Windows 10 VM
-    - Observe ping requests and replies within WireShark
-- From The Windows 10 VM, open command line or PowerShell and attempt to ping a public website (such as www.google.com) and observe the traffic in WireShark
-- Initiate a perpetual/non-stop ping from your Windows 10 VM to your Ubuntu VM
-    - Open the Network Security Group your Ubuntu VM is using and disable incoming (inbound) ICMP traffic
-    - Back in the Windows 10 VM, observe the ICMP traffic in WireShark and the command line Ping activity
-    - Re-enable ICMP traffic for the Network Security Group your Ubuntu VM is using
-    - Back in the Windows 10 VM, observe the ICMP traffic in WireShark and the command line Ping activity (should start working)
-    - Stop the ping activity
-
-<br />
-
-#### ICMP to VM2.
-<p>
-<img src="https://i.imgur.com/ZC96aiy.png" height="80%" width="80%" alt="ICMP to VM2"/>
-</p>
-
-#### ICMP to www.google.com.
-<p>
-<img src="https://i.imgur.com/DwQReRc.png" height="80%" width="80%" alt="ICMP to www.google.com"/>
-</p>
-
-#### NSG rule-set blocking ICMP traffic in VM2.
-<p>
-<img src="https://i.imgur.com/bT0prNp.png" height="80%" width="80%" alt="NSG rule-set blocking ICMP traffic in VM2"/>
-</p>
-
-#### ICMP being blocked by VM2 NSG.
-<p>
-<img src="https://i.imgur.com/FBIcPi0.png" height="80%" width="80%" alt="ICMP being blocked by VM2 NSG"/>
+<img src="https://i.imgur.com/pjijWGo.png" height="60%" width="60%" alt="osTicket VM"/>
 </p>
 
 </br>
 
-#### Part 3 (Observe SSH Traffic)
-- Back in Wireshark, filter for SSH traffic only
-- From your Windows 10 VM, “SSH into” your Ubuntu Virtual Machine (via its private IP address)
-    - Type commands (username, pwd, etc) into the linux SSH connection and observe SSH traffic spam in WireShark
-    - Exit the SSH connection by typing ‘exit’ and pressing [Enter]
+#### Part 2 (Download and Install Files from the 'Installation Files' Folder inside of the VM)
+- Install/Enable IIS in Windows with CGI
+    - World Wide Web Services --> Application Development Features --> [x] CGI
+    - Open new web browser and check 127.0.0.1 to ensure it was done properly.
+- Install PHP Manager for IIS
+- Install Rewrite Module
+- Create Directory C:\PHP
+- Unzip contents from PHP 7.3.8 to newly created C:\PHP (choose to keep file)
+
+#### Installation Files.
+<p>
+<img src="https://i.imgur.com/Nysvo4I.png" height="50%" width="50%" alt="Installation Files"/>
+</p>
+
+#### Enabling IIS in Windows with CGI.
+<p>
+<img src="https://i.imgur.com/FfSgBEm.png" height="50%" width="50%" alt="IIS enabled with CGI"/>
+</p>
+
+#### Installation of PHP Manager for IIS.
+<p>
+<img src="https://i.imgur.com/NjUCRTc.png" height="50%" width="50%" alt="PHP Manager Installation"/>
+</p>
+
+#### Installation of Rewrite Module.
+<p>
+<img src="https://i.imgur.com/CSF9zS9.png" height="50%" width="50%" alt="Rewrite Module Installation"/>
+</p>
+
+#### Unzipping documents into newly created C:\PHP directory.
+<p>
+<img src="https://i.imgur.com/GdeJOxX.png" height="60%" width="60%" alt="PHP into newly created C:\PHP directory"/>
+</p>
 
 <br />
 
-#### SSH to VM2.
+#### Part 3 (Continue With Download and Installation of Files, Install osTicket v1.15.8)
+- Install VC_redist.x86.exe
+- Install MySQL 5.5.62
+    - Typical Setup -->
+    - Launch Configuration Wizard -->
+    - Standard Configuration -->
+    - Password1
+- Open IIS as an Admin and register PHP from within IIS
+- Reload IIS (Open IIS, Stop and Start the Server)
+- Install osTicket v1.15.8
+    - Download osTicket from installation folder
+    - Extract and copy "upload" folder to c:\inetpub\wwwroot
+    - Within c:\inetpub\wwwroot, rename "upload" to "osTicket"
+- Reload IIS (Open IIS, Stop and Start and the Server)
+- Go to sites (inside IIS) --> Default --> osTicket
+    - On the right, click "Browse *:80"
+- Check extensions
+    - Go back to IIS, Sites --> Default --> osTicket
+    - Double-click PHP Manager
+    - Click "Enable or disable an extension"
+        - Enable: php_imap.dll
+        - Enable: php_intl.dll
+        - Enable: php_opcache.dll
+    - Refresh the osTicket site in your browser.
+
+<br />
+
+#### Installation of VC_redist.x86.exe .
 <p>
-<img src="https://i.imgur.com/2pAEi2y.png" height="80%" width="80%" alt="ssh to VM2"/>
+<img src="https://i.imgur.com/TVHwvy3.png" height="50%" width="50%" alt="VC_redist installed"/>
 </p>
 
-#### SSH traffic analysis between VM1 and VM2.
+#### Installation of MySQL.
 <p>
-<img src="https://i.imgur.com/S4mbBs3.png" height="80%" width="80%" alt="ssh traffic analysis between VM1 and VM2"/>
+<img src="https://i.imgur.com/k134jlk.png" height="50%" width="50%" alt="MySQL installed"/>
 </p>
 
-#### Manipulating VM2 inside of VM1.
+#### Registration of PHP within IIS.
 <p>
-<img src="https://i.imgur.com/t5b5Qwd.png" height="80%" width="80%" alt="manipulating VM2 inside VM1"/>
+<img src="https://i.imgur.com/zsBPD6x.png" height="50%" width="50%" alt="PHP registration in IIS"/>
+</p>
+
+#### osTicket Installed in c:\inetpub\wwwroot.
+<p>
+<img src="https://i.imgur.com/OZtZocg.png" height="50%" width="50%" alt="osTicket installed"/>
+</p>
+
+#### "Browse *:80" in IIS.
+<p>
+<img src="https://i.imgur.com/IX5APUN.png" height="50%" width="50%" alt="Browse *:80 in IIS"/>
+</p>
+
+#### Enabling Extensions inside IIS.
+<p>
+<img src="https://i.imgur.com/oXOQcwk.png" height="50%" width="50%" alt="Extensions Enabled"/>
+</p>
+
+#### osTicket Istaller in browser.
+<p>
+<img src="https://i.imgur.com/ppCWGko.png" height="50%" width="50%" alt="osTicket Installer in browser"/>
 </p>
 
 </br>
 
-#### Part 4 (Observe DHCP Traffic)
-- Back in Wireshark, filter for DHCP traffic only
-- From your Windows 10 VM, attempt to issue your VM a new IP address from the command line (ipconfig /renew)
-    - Observe the DHCP traffic appearing in WireShark
+#### Part 4 (osTicket and Heidi SQL installation)
+- Rename to: ost-config.php
+    - From: C:\inetpub\wwwroot\osTicket\include\ost-sampleconfig.php
+    - To: C:\inetpub\wwwroot\osTicket\include\ost-config.php
+- Assign Permissions: ost-config.php
+    - Disable inheritance --> Remove All
+    - New Permissions --> Everyone --> All
+- Continue Setting Up osTicket in the browser (click "Continue")
+    - Name the Helpdesk
+    - Default email (receives email from the customers)
+- Install HeidiSQL
+    - Open Heidi SQL
+    - Create a new session, (username: root | password: Password1)
+    - Connect to the session
+    - Create a database called "osTicket"
+- Continue setting up osTicket in the browser
+    - MySQL Database: osTicket
+    - MySQL username: root
+    - MySQL password: Password1
+    - Click "Install Now!"
+- osTicket access
+    - Browse to help desk login page: http://localhost/osTicket/scp/login.php
+    - End Users osTicket: http://localhost/osTicket/
+- Clean up!
+    - Delete: C:\inetpub\wwwroot\osTicket\setup
+    - Set Permissions to "Read Only" for: C:\inetpub\wwwroot\osTicket\include\ost-config.php
 
 <br />
 
-#### DHCP traffic.
+#### ost-sampleconfig.php renamed to ost-config.php.
 <p>
-<img src="https://i.imgur.com/0yFhKGA.png" height="80%" width="80%" alt="DHCP traffic"/>
+<img src="https://i.imgur.com/gvM9ChM.png" height="50%" width="50%" alt="Renamed to ost-config.php"/>
 </p>
 
-</br>
-
-#### Part 3 (Observe DNS Traffic)
-- Back in Wireshark, filter for DNS traffic only
-- From your Windows 10 VM within a command line, use nslookup to see what google.com and disney.com’s IP addresses are
-    - Observe the DNS traffic being show in WireShark
-
-<br />
-
-#### DNS traffic.
+#### Permissions Assigned to ost-config.php.
 <p>
-<img src="https://i.imgur.com/1VUm5Xo.png" height="80%" width="80%" alt="DNS traffic"/>
+<img src="https://i.imgur.com/y0Y6bOX.png" height="50%" width="50%" alt="Permissions assigned"/>
 </p>
 
-</br>
-
-#### Part 3 (Observe RDP Traffic)
-- Back in Wireshark, filter for RDP traffic only (tcp.port == 3389)
-- Oserve the immediate non-stop spam of traffic? Why do you think it’s non-stop spamming vs only showing traffic when you do an activity?
-    - Answer: because the RDP (protocol) is constantly showing you a live stream from one computer to another, therefor traffic is always being transmitted
-
-<br />
-
-#### RDP traffic.
+#### osTicket Basic Information and Installation.
 <p>
-<img src="https://i.imgur.com/lOd79nz.png" height="80%" width="80%" alt="RDP traffic"/>
+<img src="https://i.imgur.com/SBo8GAJ.png" height="50%" width="50%" alt="Basic information for osTicket Installation"/>
 </p>
+
+#### Heidi SQL Installed and osTicket Database created.
+<p>
+<img src="https://i.imgur.com/5nppsO7.png" height="50%" width="50%" alt="osTicket Database created in Heidi SQL"/>
+</p>
+
+#### osTicket Successfully Installed.
+<p>
+<img src="https://i.imgur.com/CvRQlKj.png" height="50%" width="50%" alt="osTicket Installed"/>
+</p>
+
+#### Admin login for osTicket.
+<p>
+<img src="https://i.imgur.com/JcQHRRp.png" height="50%" width="50%" alt="Admin Page"/>
+</p>
+
+#### End User login for osTicket.
+<p>
+<img src="https://i.imgur.com/i8ThwtD.png" height="50%" width="50%" alt="End User Page"/>
+</p>
+
